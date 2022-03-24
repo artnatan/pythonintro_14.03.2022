@@ -5,10 +5,11 @@ import sys
 #выбор операции
 input_case = input('Выбери тип операции: \n1 +\n2 -\n3 *\n4 /\n')
 
+
 #проверка ввода операции
 try:
-    input_case_int = int(input_case)
 
+    input_case_int = int(input_case)
     if input_case_int > 4:
         print('Введен не существующий тип операции')
         sys.exit()
@@ -42,6 +43,3 @@ try:
 
 except ValueError:
     print('Введено не число')
-
-
-
