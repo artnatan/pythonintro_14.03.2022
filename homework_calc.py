@@ -43,3 +43,5 @@ try:
 
 except ValueError:
     print('Введено не число')
+except ZeroDivisionError:
+    print('На ноль делить нельзя')
