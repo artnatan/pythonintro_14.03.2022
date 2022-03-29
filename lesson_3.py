@@ -60,14 +60,14 @@
 #############################################
 # if
 
-value = 0
-
-if value > 0:
-    print(f'{value} больше 0')
-elif value == 0:
-    print(f'{value} равно 0')
-else:
-    print(print(f'{value} меньше 0'))
+# value = 0
+#
+# if value > 0:
+#     print(f'{value} больше 0')
+# elif value == 0:
+#     print(f'{value} равно 0')
+# else:
+#     print(print(f'{value} меньше 0'))
 
 #################################################
 # функция input
@@ -102,3 +102,14 @@ else:
 # input_case = input('Выбери тип операции: \n1 +\n2 -\n3 *\n4 /\n')
 # value_1 = input("введи число: ")
 # value_2 = input("введи число: ")
+
+
+www = "www.conquer_and_command.net"
+
+if ".com" in www:
+
+    print("com in www")
+
+else:
+
+    print("com not in www")
