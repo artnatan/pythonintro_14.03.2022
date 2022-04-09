@@ -27,17 +27,17 @@
 ##############################################
 # my_str = "dfhourhfaounvjlnC?N"
 # my_list = []
-#
+
 # print(id(my_list))
+
+# my_list.extend(list(my_str[::2]))
 #
-# # my_list.extend(list(my_str[::2]))
-#
-# # for index, symbol in enumerate(my_str):
-# #     if not index % 2:
-# #         my_list.append(symbol)
-#
-# # for symbol in my_str[::2]:
-# #     my_list.append(symbol)
+# for index, symbol in enumerate(my_str):
+#     if not index % 2:
+#         my_list.append(symbol)
+# #
+# for symbol in my_str[::2]:
+#     my_list.append(symbol)
 # print(my_list, id(my_list))
 
 ################################################
@@ -111,15 +111,15 @@
 # my_list = [1, 2, 3, 2, 2, 3]
 # print(set(my_list))
 
-# my_set_1 = set('12345')
-# my_set_2 = {"1", "2", 3}
-# # print(my_set_2, my_set_1)
-#
-# result_union = my_set_1.union((my_set_2))
-# result_intersection = my_set_1.intersection((my_set_2))
-# result_difference = my_set_1.difference((my_set_2))
-# print(result_union, result_intersection, result_difference)
+my_set_1 = set('12345')
+my_set_2 = {"1", "2", 3}
+print(my_set_2, my_set_1)
 
-my_str = "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqa"
-for symbol in set(my_str):
-    print(symbol)
+result_union = my_set_1.union((my_set_2))
+result_intersection = my_set_1.intersection((my_set_2))
+result_difference = my_set_1.difference((my_set_2))
+print(result_union, result_intersection, result_difference)
+
+# my_str = "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqa"
+# for symbol in set(my_str):
+#     print(symbol)

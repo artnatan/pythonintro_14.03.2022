@@ -128,30 +128,30 @@
 # new_str = '/'.join(my_list)
 # print(new_str)
 
-# file_path = 'home/Users/Fantomas/Desktop/lesson.py'
-# parts = file_path.split('/')
-# print(parts)
-# parts[-1] = 'test.txt'
-# file_path = '/'.join(parts)
-# print(file_path)
+file_path = 'home/Users/Fantomas/Desktop/lesson.py'
+parts = file_path.split('/')
+print(parts)
+parts[-1] = 'test.txt'
+file_path = '/'.join(parts)
+print(file_path)
 
 ############сортировка##############
 
-# my_list = [2, 5, 1, 9, -4, 7]
-my_list = ['tmp', 'A', 'home', 'images', 'photo.png', '1', '@', '[']
-
-# my_list.sort() #сортирует текущий список без возможности вернуть старый порядок
-# print(my_list)
-
-sort_list = sorted(my_list) # создает копию и ее сортирует
-print(sort_list)
+# # my_list = [2, 5, 1, 9, -4, 7]
+# my_list = ['tmp', 'A', 'home', 'images', 'photo.png', '1', '@', '[']
+#
+# # my_list.sort() #сортирует текущий список без возможности вернуть старый порядок
+# # print(my_list)
+#
+# sort_list = sorted(my_list) # создает копию и ее сортирует
+# print(sort_list)
 
 #ASCII - таблица символов
 # print(ord('A'), ord('@'), ord('['))
 # print(chr(102))
 
-sort_list = sorted(my_list, reverse=True) # сортирует в обратном порядке
-print(sort_list)
-
-sort_list = sorted(my_list, key=len) # работа с ключами
-print(sort_list)
+# sort_list = sorted(my_list, reverse=True) # сортирует в обратном порядке
+# print(sort_list)
+#
+# sort_list = sorted(my_list, key=len) # работа с ключами
+# print(sort_list)
