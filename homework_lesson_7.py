@@ -35,9 +35,9 @@ print(f'#3:{my_result}')
 # 4. Дан список my_list. СОЗДАТЬ НОВЫЙ список new_list у которого первый элемент из my_list
 # стоит на последнем месте. Если my_list [1,2,3,4], то new_list [2,3,4,1]
 
-my_list = ['q', 'w', 'e', 'r', 't', 'y']
-my_str = ''.join(my_list[1:]) + my_list[0]
-new_list = list(my_str)
+my_list = ['q', 'w', 1, 2]
+new_list = my_list[1:]
+new_list.append(my_list[0])
 print(f'#4:{my_list}, {new_list}')
 
 # 5.Дан список my_list. В ЭТОМ списке первый элемент переставить на последнее место.
@@ -95,19 +95,14 @@ print(f'#8:{pair_list}')
 # Крайние элементы списка никогда не учитываются, поскольку у них недостаточно соседей.
 # Для списка [2,4,1,5,3,9,0,7] ответом будет 3 потому что 4 > 2+1, 5 > 1+3, 9>3+0.
 
-my_list = [2, 4, 1, 5, 3, 9, 0, 5, 2]
-new_list = []
-count = 0
+my_list = [2, 4, 1, 5, 3, 9, 0, 5, 2, 0, 5]
+counter = 0
 
-for _ in range(len(my_list)-2):#-2 так как крайние числа не учитываются, поскольку у них недостаточно соседей
-    new_list.append(my_list[:3])
-    my_list.pop(0)
+for i in range(len(my_list) - 2):
+    if my_list[i + 1] > my_list[i] + my_list[i + 2]:
+        counter += 1
 
-for list_i in new_list:
-    if list_i[1] > list_i[0] + list_i[2]:
-        count += 1
-
-print(f'#9:{count}')
+print(f'#9:{counter}')
 # 10. Дан список my_list в котором могут быть как строки (type str) так и целые числа (type int).
 # Например [1, 2, 3, "11", "22", 33]
 # Создать новый список в который поместить только строки из my_list.
@@ -125,7 +120,7 @@ print(f'#10:{result_list}')
 my_str = 'qwertyqwer112'
 my_list = []
 
-for symbol in my_str:
+for symbol in set(my_str):
     if my_str.count(symbol) == 1:
         my_list.append(symbol)
 print(f'#11:{my_list}')
@@ -146,18 +141,12 @@ print(f'#12:{my_list}')
 
 my_str_1 = 'eaaaasdf1'
 my_str_2 = 'asdfff2bbbbbe'
-
-my_list_1 = []
-my_list_2 = []
 my_result = []
 
-for symbol in my_str_1:
-    if my_str_1.count(symbol) == 1:
-        my_list_1.append(symbol)
-for symbol in my_str_2:
-    if my_str_2.count(symbol) == 1:
-        my_list_2.append(symbol)
+my_set = set(my_str_1).intersection(my_str_2)
 
-my_result = list(set(my_list_1).intersection(my_list_2))
+for symbol in my_set:
+    if my_str_1.count(symbol) == 1 and my_str_2.count(symbol) == 1:
+        my_result.append(symbol)
 
 print(f'#13:{my_result}')
