@@ -33,13 +33,13 @@ print(f'1: {dict_result}')
 # Булевое значение True означает, что порядок сортировки алфавитный, False - обратный порядок.
 
 
-def sort_dict_lists(dict_files_dirs: dict, sort_rev: bool =False) -> dict:
-    dict_files_dirs['filenames'].sort(reverse=sort_rev)
-    dict_files_dirs['dirnames'].sort(reverse=sort_rev)
+def sort_dict_lists(dict_files_dirs: dict, sort_rev: bool = True) -> dict:
+    dict_files_dirs['filenames'].sort(reverse=not sort_rev)
+    dict_files_dirs['dirnames'].sort(reverse=not sort_rev)
     return dict_files_dirs
 
 
-sort_revers = True
+sort_revers = False
 dict_sort = sort_dict_lists(dict_result, sort_revers)
 print(f'2: {dict_sort}')
 
