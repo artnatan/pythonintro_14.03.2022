@@ -15,9 +15,10 @@ def create_dict_lists(dirname: str) -> dict:
                        }
 
     for obj in list_dirs_files:
-        if os.path.isfile(f'{dirname}\\{obj}'):
+        dir_path = os.path.join(dirname, obj)
+        if os.path.isfile(dir_path):
             dict_dirs_files['filenames'].append(obj)
-        elif os.path.isdir(f'{dirname}\\{obj}'):
+        elif os.path.isdir(dir_path):
             dict_dirs_files['dirnames'].append(obj)
 
     return dict_dirs_files
