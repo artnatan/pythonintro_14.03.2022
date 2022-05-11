@@ -2,16 +2,16 @@ import csv
 import json
 from random import uniform
 from argparse import ArgumentParser
+from typing import Union
 
 
 class WorkWithData:
-    def __init__(self, filename_config: str, filename_current_status: str, filename_history: str, args: dict):
+    def __init__(self, filename_config: str, filename_current_status: str, filename_history: str):
         self.filename_config = filename_config
         self.filename_current_status = filename_current_status
         self.data_config = self.read_config()
         self.filename_history = filename_history
         self.data_status = self.read_status()
-        self.args = args
         self.history_data = self.read_history()
 
     # читаем конфиг
@@ -47,7 +47,7 @@ class WorkWithData:
         return history_data
 
     # записываем историю операций
-    def write_history(self) -> None:
+    def write_history(self, type_operation) -> None:
         fieldnames = ['number', 'course', 'account_uah', 'account_usd', 'type_operation']
         with open(self.filename_history, 'w') as file:
             writer = csv.DictWriter(file, fieldnames=fieldnames)
@@ -58,57 +58,70 @@ class WorkWithData:
                                  "course": self.data_status['course'],
                                  "account_uah": self.data_status['account_uah'],
                                  "account_usd": self.data_status['account_usd'],
-                                 "type_operation": self.args['TypeOperation']
+                                 "type_operation": type_operation
                                  })
 
     # операция NEXT
-    def change_course(self):
+    def change_course(self) -> None:
         course_delta = uniform(-self.data_config['delta'], self.data_config['delta'])
         self.data_status['course'] = round(float(self.data_status['course']) + course_delta, 2)
 
-    # операции с продажей/покупкой BUY, SELL, BUY ALL, SELL ALL
-    def buy_sell_money(self):
+    # операции с продажей/покупкой BUY, BUY ALL, SELL, SELL ALL
+    def buy_money(self, amount: Union[str, int]) -> None:
         balance_uah = float(self.data_status['account_uah'])
         balance_usd = float(self.data_status['account_usd'])
-        course = self.data_status['course']
-        if self.args['TypeOperation'] == 'BUY' and self.args['amount'] != 'ALL':
-            if float(self.args['amount']) * course <= balance_uah:
-                self.data_status['account_uah'] = balance_uah - float(self.args['amount']) * course
-                self.data_status['account_usd'] = balance_usd + float(self.args['amount'])
-            else:
-                print(f"UNAVAILABLE, REQUIRED BALANCE UAH {float(self.args['amount']) * course},"
-                      f"\nAVAILABLE {balance_uah}")
-        elif self.args['TypeOperation'] == 'BUY' and self.args['amount'] == 'ALL':
-            residual = divmod(balance_uah, course)
-            self.data_status['account_uah'] = round(residual[1], 2)
-            self.data_status['account_usd'] = balance_usd + residual[0]
-        elif self.args['TypeOperation'] == 'SELL' and self.args['amount'] != 'ALL':
-            if float(self.args['amount']) <= balance_usd:
-                self.data_status['account_uah'] = balance_uah + float(self.args['amount']) * course
-                self.data_status['account_usd'] = balance_usd - float(self.args['amount'])
-            else:
-                print(f"UNAVAILABLE, REQUIRED BALANCE USD {float(self.args['amount'])},"
-                      f"\nAVAILABLE {balance_usd}")
-        elif self.args['TypeOperation'] == 'SELL' and self.args['amount'] == 'ALL':
-            self.data_status['account_uah'] = balance_uah + balance_usd * course
-            self.data_status['account_usd'] = 0.0
+        if float(amount) * self.data_status['course'] <= balance_uah:
+            self.data_status['account_uah'] = balance_uah - float(amount) * self.data_status['course']
+            self.data_status['account_usd'] = balance_usd + float(amount)
+        else:
+            self.get_balance(amount)
+
+    def buy_all_money(self) -> None:
+        residual = divmod(float(self.data_status['account_uah']), self.data_status['course'])
+        self.data_status['account_uah'] = round(residual[1], 2)
+        self.data_status['account_usd'] = float(self.data_status['account_usd']) + residual[0]
+
+    def sell_money(self, amount: Union[str, int]) -> None:
+        balance_uah = float(self.data_status['account_uah'])
+        balance_usd = float(self.data_status['account_usd'])
+        if float(amount) <= balance_usd:
+            self.data_status['account_uah'] = balance_uah + float(amount) * self.data_status['course']
+            self.data_status['account_usd'] = balance_usd - float(amount)
+        else:
+            self.get_balance(amount)
+
+    def sell_all_money(self) -> None:
+        uah_from_usd = float(self.data_status['account_usd']) * self.data_status['course']
+        self.data_status['account_uah'] = float(self.data_status['account_uah']) + uah_from_usd
+        self.data_status['account_usd'] = 0.0
+
+    # напечатать баланс, если не хватает средств
+    def get_balance(self, amount: Union[str, int]) -> None:
+        print(f"UNAVAILABLE, REQUIRED BALANCE UAH {float(amount) * self.data_status['course']},"
+              f"\nAVAILABLE {float(self.data_status['account_uah'])}")
 
     # операция RESTART
-    def restart_trader(self):
+    def restart_trader(self) -> None:
         with open(self.filename_history, 'w'):
             pass
         self.data_status.clear()
 
 
-def change_operation(data_worker):
-    if args['TypeOperation'] == 'RATE':     # операция RETE
+def change_operation(data_worker, args: dict) -> None:
+    if args['TypeOperation'] == 'RATE':     # операция RATE
         print(data_worker.data_status['course'])
     elif args['TypeOperation'] == 'AVAILABLE':     # операция AVAILABLE
         print(
             f"Account UAH: {data_worker.data_status['account_uah']} "
             f"\nAccount USD: {data_worker.data_status['account_usd']}")
-    elif args['TypeOperation'] == 'BUY' or args['TypeOperation'] == 'SELL':
-        data_worker.buy_sell_money()
+    elif args['TypeOperation'] == 'BUY' and args['amount'] != 'ALL':
+        data_worker.buy_money(args['amount'])
+    elif args['TypeOperation'] == 'BUY' and args['amount'] == 'ALL':
+        data_worker.buy_all_money()
+    elif args['TypeOperation'] == 'SELL' and args['amount'] != 'ALL':
+        data_worker.sell_money(args['amount'])
+    elif args['TypeOperation'] == 'SELL' and args['amount'] == 'ALL':
+        data_worker.sell_all_money()
     elif args['TypeOperation'] == 'NEXT':
         data_worker.change_course()
     elif args['TypeOperation'] == 'RESTART':
@@ -124,7 +137,7 @@ args.add_argument('TypeOperation')
 args.add_argument('amount', nargs='?', default=0)
 args = vars(args.parse_args())
 
-data_worker = WorkWithData(filename_config, filename_current_status, filename_history, args)
-change_operation(data_worker)
+data_worker = WorkWithData(filename_config, filename_current_status, filename_history)
+change_operation(data_worker, args)
 data_worker.write_status()
-data_worker.write_history()
+data_worker.write_history(args['TypeOperation'])
